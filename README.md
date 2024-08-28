@@ -1,56 +1,54 @@
-# Tarox Project
+# Tarox: Serverless Tarot Card Reading
 
-Tarox is an interactive web-based tarot card reading application designed to offer users a visually immersive and engaging experience. The application randomly shuffles and selects tarot cards, presenting them with animated effects. Users can view card details and combinations that influence their reading.
+## Overview
 
-## Features
+Tarox offers an immersive, client-side tarot reading experience. This serverless web application leverages HTML, CSS, and JavaScript (with jquery, gsap and tailwind loaded via CDN) to deliver mystical insights without backend dependencies.
 
-- **Interactive Tarot Card Selection:** Users can select cards as they pulse on the screen, revealing detailed information about each card and its position in the reading.
-- **Animated Card Placement:** Cards are animated with a rotation and scaling effect during placement to enhance the user experience.
-- **Card Details Display:** Detailed information about the selected cards is displayed, including card images, names, and descriptions.
-- **Combination Analysis:** After selecting cards, users can view possible card combinations and their interpretations, adding depth to the reading.
+## Key Features
 
-## How It Works
+- **Dynamic Card Selection**: Engage with pulsating cards that smoothly transition into place upon selection.
+- **Comprehensive Interpretations**: Dive deep into each card's symbolism and significance within your reading.
+- **Combination Analysis**: Uncover nuanced meanings through the interplay of selected cards.
+- **Celestial Ambiance**: Immerse yourself in a mesmerizing starfield backdrop, complete with optional hyperspace effects and ephemeral shooting stars.
 
-1. **Starting the Reading:** 
-   - Click the "Begin" button to start the tarot card reading session.
-   - The application shuffles and displays 10 cards on the screen.
+## User Journey
 
-2. **Selecting Cards:** 
-   - Cards will pulse to indicate they can be selected.
-   - Clicking on a pulsating card reveals its details and position information.
-   - The selected card is locked in place, and the next card in the sequence starts pulsing.
+1. Initiate your session with the "Begin" button, prompting a shuffle of the deck.
+2. Select from an array of 10 pulsating cards, each revealing its secrets upon choice.
+3. Delve into combination interpretations after your initial selection for a more profound reading.
 
-3. **Viewing Combinations:**
-   - After selecting the first card, the "Combinations" button becomes available.
-   - Clicking the "Combinations" button displays any combinations of cards that might influence the reading, along with their interpretations.
+## Technical Architecture
 
-## Code Overview
+- `index.html`: Application entry point
+- `css/styles.css`: Visual styling definitions
+- `js/stars.js`: Celestial animation logic
+- `js/cardInfo.js`: Tarot card data repository
+- `js/main.js`: Core application functionality
+- `img/`: Optional repository for visual assets
 
-### HTML Structure
-- The `index.php` file contains the main HTML structure, including a modal for starting the reading and buttons for user interactions.
-- The page is styled and animated using external CSS and JavaScript files (`css.php`, `scripts.php`, `stars.js`, and `cardInfo.js`).
+## Deployment
 
-### JavaScript Functionality
-- **Card Shuffling and Selection:** 
-  - The `shuffleArray` function randomly shuffles the tarot cards.
-  - The `selectUniqueCards` function selects 10 unique cards for the reading.
-  
-- **Card Placement and Animation:** 
-  - The `createCardElement` function creates card elements dynamically and attaches event listeners.
-  - The `animateCardPlacement` function handles the animation of cards when they are placed on the screen.
-  
-- **Displaying Card Details:** 
-  - The `showCardDetails` function updates the card details section with information about the selected card and its position.
-  
-- **Combination Analysis:** 
-  - The `combinations` function checks for combinations of cards based on their values and displays the associated meanings.
+Tarox's serverless nature allows for effortless deployment across various static hosting platforms.
 
-## Installation and Setup
+### Local Setup
 
-To set up the Tarox project locally:
+```bash
+git clone https://github.com/saintpetejackboy/tarox.git
+cd tarox
+# Open index.html in your preferred browser
+```
 
-1. **Clone the Repository:**
+### GitHub Pages Deployment
 
-   ```bash
-   git clone https://github.com/saintpetejackboy/tarox.git
-   cd tarox
+1. Push your repository to GitHub.
+2. Navigate to repository settings.
+3. Under "Pages", configure for main branch deployment.
+4. Access your live application at `https://saintpetejackboy.github.io/tarox/`.
+
+## Contribute
+
+We welcome enhancements and bug fixes. Feel free to open issues or submit pull requests to contribute to Tarox's evolution.
+
+## License
+
+Tarox is distributed under no license and is entirely open source freeware.

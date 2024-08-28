@@ -53,6 +53,34 @@ const cardDefinitions ={
     'ace_of_diamonds' : 'An important message. A letter or package/gift arriving, the contents of which are very important.'
     }
 
+    function getCombinationText(value, count) {
+        const combinations = {
+            king: ['Two Kings: Business partnership. Good advice.', 'Three Kings: Good support.', 'Four Kings: Rewards, success.'],
+            queen: ['Two Queens: Meeting with a friend. Idle chatter, gossip or curiosity.', 'Three Queens: Visits, or a betrayal of confidence.', 'Four Queens: Social events. May also represent scandals.'],
+            jack: ['Two Jacks: Disagreements.', 'Three Jacks: False friends, or quarrels.', 'Four Jacks: High spirits. May also represent parties, or battles.'],
+            10: ['Two Tens: Circumstances improve. Two red tens may signal a wedding.', 'Three Tens: Plans get upset.', 'Four Tens: Guaranteed success.'],
+            9: ['Two Nines: Minor gains.', 'Three Nines: Good health.', 'Four Nines: Wishes come true.'],
+            8: ['Two Eights: Indiscretion. A brief affair causes regret. Two red eights signals new clothes.', 'Three Eights: Not good to make long term commitments now.', 'Four Eights: Worries and burdens prove too much to handle.'],
+            7: ['Two Sevens: Light-hearted fun. Two red sevens represent love and pleasure.', 'Three Sevens: Lowered vitality, or a brief illness.', 'Four Sevens: Conspiracy.'],
+            6: ['Two Sixes: Contradictions.', 'Three Sixes: Hard work.', 'Four Sixes: Unexpected challenges.'],
+            5: ['Two Fives: Personal challenges.', 'Three Fives: Disappointments.', 'Four Fives: Personal desires realized.'],
+            4: ['Two Fours: Shaky foundation.', 'Three Fours: Foundation weakened.', 'Four Fours: Secure foundation.'],
+            3: ['Two Threes: Choices.', 'Three Threes: Stability.', 'Four Threes: Hope.'],
+            2: ['Two Twos: Parting of ways.', 'Three Twos: Direction reversed.', 'Four Twos: Reaching a crossroads.'],
+            ace: ['Two Aces: Partnerships or reunions. Clubs and Hearts are marriage, while Spades and Diamonds represent a difficult union.', 'Three Aces: Good news, a lucky break.', 'Four Aces: Triumph.']
+        };
+
+        // Convert numbered values to strings if they're numbers
+        const key = typeof value === 'number' ? value.toString() : value.toLowerCase();
+
+        if (combinations[key] && combinations[key][count - 2]) {
+            return combinations[key][count - 2];
+        } else {
+            console.warn(`No combination text found for ${value} with count ${count}`);
+            return `${count} ${value}s: No specific meaning defined.`;
+        }
+    }
+    
     const cards = [
         '2_of_clubs', '2_of_diamonds', '2_of_hearts', '2_of_spades',
         '3_of_clubs', '3_of_diamonds', '3_of_hearts', '3_of_spades',

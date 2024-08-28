@@ -14,12 +14,17 @@ style.textContent = `
         width: 200%;
         height: 200%;
         pointer-events: none;
+        transition: filter 0.5s;
+    }
+    .space.hyperspace {
+        filter: brightness(1.5) contrast(1.2) saturate(1.5);
     }
     .star {
         position: absolute;
         background-color: #ffffff;
         border-radius: 50%;
         animation: twinkle var(--twinkle-duration) infinite;
+        transition: transform 0.5s;
     }
     .shooting-star {
         position: absolute;
@@ -34,6 +39,7 @@ style.textContent = `
         0%, 100% { opacity: var(--max-opacity); }
         50% { opacity: var(--min-opacity); }
     }
+    .hyperspace { opacity: 0.5; }
 `;
 document.head.appendChild(style);
 
@@ -53,7 +59,24 @@ class Star {
         this.element.style.top = `${Math.random() * 100}%`;
         this.element.style.setProperty('--max-opacity', Math.random() * 0.5 + 0.5);
         this.element.style.setProperty('--min-opacity', Math.random() * 0.1);
-        this.element.style.setProperty('--twinkle-duration', `${Math.random() * 5 + 2}s`);
+        this.element.style.setProperty('--twinkle-duration', `${Math.random() * 1 + 0.5}s`);
+    }
+
+    update() {
+        const currentOpacity = parseFloat(this.element.style.opacity);
+        const change = Math.random() * 0.1 - 0.05;
+        this.element.style.opacity = Math.max(0, Math.min(1, currentOpacity + change));
+    }
+
+    setHyperspace(active) {
+        if (active) {
+            this.element.style.transform = 'scale(5) translateZ(0)';
+            const bgColor = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.random() * 0.7 + 0.1})`; // Random RGB color with opacity between 0.1 and 0.8
+    
+            this.element.style.backgroundColor = bgColor;
+        } else {
+            this.element.style.transform = 'scale(1) translateZ(0)';
+        }
     }
 }
 
@@ -103,7 +126,6 @@ class ShootingStar {
         this.element.style.opacity = opacity;
     }
 }
-
 class SpaceAnimation {
     constructor() {
         this.container = document.createElement('div');
@@ -115,6 +137,9 @@ class SpaceAnimation {
         this.lastTime = 0;
         this.xOffset = 0;
         this.yOffset = 0;
+        this.isHyperspace = false;
+        this.normalSpeed = 0.01;
+        this.hyperspaceSpeed = 0.5;
 
         this.createStars();
         this.createShootingStars();
@@ -134,7 +159,7 @@ class SpaceAnimation {
     }
 
     moveStars(deltaTime) {
-        const speed = 0.01;
+        const speed = this.isHyperspace ? this.hyperspaceSpeed : this.normalSpeed;
         this.xOffset -= speed * deltaTime;
         this.yOffset -= speed * deltaTime * 0.5;
 
@@ -150,12 +175,32 @@ class SpaceAnimation {
         this.lastTime = currentTime;
 
         this.moveStars(deltaTime);
-
         this.shootingStars.forEach(star => star.update());
 
         requestAnimationFrame(this.animate.bind(this));
     }
+
+    startHyperspace() {
+        this.isHyperspace = true;
+        this.container.classList.add('hyperspace');
+        this.stars.forEach(star => star.setHyperspace(true));
+    }
+
+    stopHyperspace() {
+        this.isHyperspace = false;
+        this.container.classList.remove('hyperspace');
+        this.stars.forEach(star => star.setHyperspace(false));
+    }
 }
 
 // Initialize the space animation
-new SpaceAnimation();
+const spaceAnimation = new SpaceAnimation();
+
+// Global functions to start and stop hyperspace
+window.hyperSpaceStart = function() {
+    spaceAnimation.startHyperspace();
+};
+
+window.hyperSpaceStop = function() {
+    spaceAnimation.stopHyperspace();
+};

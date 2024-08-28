@@ -1,4 +1,4 @@
-<style>
+
         body {
             background-color: #111827;
             color: #e5e7eb;
@@ -42,13 +42,13 @@
             }
         }
         @keyframes rainbow {
-    0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.7); }
-    14% { box-shadow: 0 0 30px rgba(255, 127, 0, 0.7); }
+    0%, 100% { box-shadow: 0 0 30px rgba(255, 0, 0, 0.7); }
+    14% { box-shadow: 0 0 40px rgba(255, 127, 0, 0.7); }
     28% { box-shadow: 0 0 40px rgba(255, 255, 0, 0.7); }
-    42% { box-shadow: 0 0 60px rgba(0, 255, 0, 0.7); }
+    42% { box-shadow: 0 0 80px rgba(0, 255, 0, 0.7); }
     57% { box-shadow: 0 0 50px rgba(0, 127, 255, 0.7); }
     71% { box-shadow: 0 0 40px rgba(75, 0, 130, 0.7); }
-    85% { box-shadow: 0 0 30px rgba(143, 0, 255, 0.7); }
+    85% { box-shadow: 0 0 10px rgba(143, 0, 255, 0.7); }
 }
         @keyframes brightness {
             0% { filter: brightness(100%); }
@@ -111,6 +111,9 @@
                 height: 105px;
             }
         }
+        h2 { color: lightblue; }
+        b { color: lightblue; }
+        #close-help { position: absolute; top: 10px; right: 10px; }
         .cardTitle {
             text-transform: capitalize;
             font-size: 1rem;
@@ -125,6 +128,12 @@
             top: 1rem;
             right: 1rem;
             display: none;
+        }
+
+        #help-button {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
         }
         .fade-in {
             opacity: 0;
@@ -188,4 +197,52 @@
             color: white;
             z-index: 1000; /* Higher than other elements */
         }
-    </style>
+
+
+.lookAtMe {
+    animation: pulse 1s infinite, rainbow 2s infinite, brightness 3s infinite;
+}
+
+/* Webkit browsers (Chrome, Safari, newer versions of Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a; /* Very dark gray, almost black */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1a2e; /* Dark blue */
+  border-radius: 10px;
+  border: 2px solid #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #16213e; /* Slightly lighter blue on hover */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1a1a2e #0a0a0a;
+}
+
+li { margin-left: 20px; }
+
+/* For Internet Explorer */
+body {
+  scrollbar-face-color: #1a1a2e;
+  scrollbar-track-color: #0a0a0a;
+  scrollbar-arrow-color: #4a5568;
+  scrollbar-shadow-color: #2d3748;
+}
+
+/* Light blue accents */
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner {
+  background-color: #4a5568; /* Light blue accent */
+}
+
