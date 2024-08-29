@@ -1,4 +1,8 @@
-$('#help-button').click(function() {
+ // Use 'touchstart' along with 'click' for mobile compatibility
+ $('body').off('click touchstart', '.help-button').on('click touchstart', '.help-button', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
     // Check if the help modal already exists
     if ($('#help-hider').length === 0 && $('#help-div').length === 0) {
         // Append the help-hider modal to blur everything underneath
@@ -40,14 +44,14 @@ $('#help-button').click(function() {
         });
 
         // Close the modal when clicking outside of it
-        $(document).on('click', function(event) {
+        $(document).on('click touchstart', function(event) {
             if (!$(event.target).closest('#help-div, #help-button').length) {
                 closeHelpModal();
             }
         });
 
         // Close the modal when the close button is clicked
-        $('body').off('click', '.close-help').on('click', '.close-help', function() {
+        $('body').off('click touchstart', '.close-help').on('click touchstart', '.close-help', function() {
             closeHelpModal();
         });
 

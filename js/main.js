@@ -1,5 +1,49 @@
 let currentCardIndex = 0;
 let selectedCards = [];
+// Set the initial imgFolder value
+let imgFolder = localStorage.getItem('imgFolder') || '';
+
+// Set the dropdown to the current value
+document.getElementById('imgFolderSelect').value = imgFolder;
+
+
+// Function to update local storage and refresh the page
+function updateImgFolder() {
+    var selectedFolder = document.getElementById('imgFolderSelect').value;
+    console.log('Updating to: ' + selectedFolder);
+    
+    // Update local storage
+    localStorage.setItem('imgFolder', selectedFolder);
+    
+    // Update the imgFolder variable
+    imgFolder = selectedFolder;
+    
+    // Update the CSS without reloading
+    updateCardCssRule();
+}
+
+function updateCardCssRule() {
+    console.log('Current imgFolder:', imgFolder); // Debugging log
+
+    // Construct the new background path
+    let backgroundPath = imgFolder ? `img/${imgFolder}/back.webp?${new Date().getTime()}` : `img/back.webp?${new Date().getTime()}`;
+
+    // Check if the style tag already exists, otherwise create it
+    let styleElement = $('#dynamic-card-styles');
+    if (styleElement.length === 0) {
+        styleElement = $('<style id="dynamic-card-styles"></style>');
+        $('head').append(styleElement);
+    }
+
+    // Update or insert the CSS rule
+    let cssRule = `.card { background-image: url('${backgroundPath}'); }`;
+    styleElement.text(cssRule);
+}
+
+// Call the function to update the card CSS rule on page load
+updateCardCssRule();
+
+
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -19,11 +63,10 @@ function selectUniqueCards(count) {
 }
 
 function createCardElement(card, index) {
-    return $('<div>')
+    const cardElement = $('<div>')
         .addClass('card')
         .attr('data-index', index)
         .css({
-            backgroundImage: `url('img/${card}.png')`,
             backgroundSize: 'cover',
             left: cardPositions[index].left,
             top: cardPositions[index].top,
@@ -33,19 +76,30 @@ function createCardElement(card, index) {
         .on('click', function () {
             showCardDetails(card, index);
             $(this).addClass('clicked');
-            currentCardIndex = index + 1; // Set currentCardIndex to the next card
+            currentCardIndex = index + 1;
             if (currentCardIndex < selectedCards.length) {
                 $(`.card[data-index="${currentCardIndex}"]`).addClass('pulse');
             }
             if (currentCardIndex === 1) {
                 $('#combinations-button').show();
             }
-            
         });
+
+    return cardElement;
+}
+
+function loadImage(url) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => resolve(img);
+        img.onerror = (err) => reject(err);
+    });
 }
 
 function animateCardPlacement(cardElement, index, callback) {
     const delay = index === 10 ? 0 : index * 0.3;
+    const imageUrl = `img/${imgFolder}/${selectedCards[index]}.webp`;
 
     gsap.to(cardElement, {
         opacity: 1,
@@ -54,18 +108,67 @@ function animateCardPlacement(cardElement, index, callback) {
         duration: 1.5,
         delay: delay,
         ease: 'power2.out',
-        onComplete: callback
+        onComplete: async function() {
+            try {
+                // Wait for the image to be loaded
+                const img = await loadImage(imageUrl);
+
+                // Once the image is loaded, set it as the background and flip the card
+                cardElement.css({
+                    backgroundImage: `url('${img.src}')`
+                });
+                cardElement.addClass('flipped');
+                if (callback) callback();
+            } catch (err) {
+                console.error('Failed to load image:', err);
+            }
+        }
     });
 }
 
+
+
+
+function startReading() {
+
+    $('body').append(overlay);
+    $('.modal').fadeOut();
+    $('#reading-area').empty();
+    $('#selected-card, #position-info').hide().removeClass('show');
+    selectedCards = selectUniqueCards(10);
+    let animationsCompleted = 0;
+    hyperSpaceStart();
+    selectedCards.forEach((card, index) => {
+        const cardElement = createCardElement(card, index);
+        $('#reading-area').append(cardElement);
+
+        animateCardPlacement(cardElement, index, () => {
+            animationsCompleted++;
+            if (animationsCompleted === selectedCards.length) {
+                $(`.card[data-index="0"]`).addClass('pulse');
+                $('.loading-overlay').remove(); // Remove the overlay after animations
+                hyperSpaceStop();
+                }
+        });
+    });
+
+    $('#start-reading').hide();
+    $('.card').addClass('floating');
+}
+
+
+$('body').on('click', '.refresh-button', function(){
+window.location.reload();
+
+});
 
 function showCardDetails(card, index) {
 const cardName = card.replace(/_/g, ' ').replace(/\.\w+$/, '');
 const position = positions[index];
 
 const imgElement = $('<img>', {
-src: `img/${card}.png`,
-style: 'width: 80%; max-width: 80px; height: auto; margin: 20px auto; display: block;'
+src: `img/${imgFolder}/${card}.webp`,
+class: 'card-img'
 });
 
 $('#selected-card').addClass('fade-in').html(`
@@ -105,8 +208,8 @@ $('#selected-card').fadeIn(500);
 
 
     $('#position-info').html(`
-        <h3 style='color: #CBC3E3; font-weight: bold;'> ${index + 1}: ${position.name}</h3>
-        <p>${position.description}</p>
+        <h3 class="positionTitle" style='color: #CBC3E3; font-weight: bold;'> ${index + 1}: ${position.name}</h3>
+        <p class="positionText">${position.description}</p>
     `).removeClass('show').addClass('fade-in').show();
 
     setTimeout(() => {
@@ -125,32 +228,6 @@ backgroundColor: 'rgba(0, 0, 0, 0.3)', // Adjust transparency as needed
 zIndex: 1000, // Make sure it's on top of other elements
 });
 
-function startReading() {
-
-    $('body').append(overlay);
-    $('.modal').fadeOut();
-    $('#reading-area').empty();
-    $('#selected-card, #position-info').hide().removeClass('show');
-    selectedCards = selectUniqueCards(10);
-    let animationsCompleted = 0;
-    hyperSpaceStart();
-    selectedCards.forEach((card, index) => {
-        const cardElement = createCardElement(card, index);
-        $('#reading-area').append(cardElement);
-
-        animateCardPlacement(cardElement, index, () => {
-            animationsCompleted++;
-            if (animationsCompleted === selectedCards.length) {
-                $(`.card[data-index="0"]`).addClass('pulse');
-                $('.loading-overlay').remove(); // Remove the overlay after animations
-                hyperSpaceStop();
-                }
-        });
-    });
-
-    $('#start-reading').hide();
-    $('.card').addClass('floating');
-}
 
 
 function combinations() {
@@ -187,9 +264,9 @@ function combinations() {
         combinationTexts.forEach(combo => {
             combinationHtml += '<div class="combination">';
             combo.cards.forEach(card => {
-                $(`.card[style*="img/${card}.png"]`).addClass('pulse');
-                combinationHtml += `<img src="img/${card}.png" alt="${card}" style="width: 40px; height: auto; margin-right: 5px;">`;
-                $(`.card[style*="img/${card}.png"]`).addClass('pulse');
+                $(`.card[style*="img/${card}.webp"]`).addClass('pulse');
+                combinationHtml += `<img src="img/${imgFolder}/${card}.webp" alt="${card}" style="width: 40px; height: auto; margin-right: 5px;">`;
+                $(`.card[style*="img/${card}.webp"]`).addClass('pulse');
             });
             combinationHtml += `<p style="font-size: 0.7rem; margin-top: 5px; color: white;">${combo.text}</p></div>`;
         });
@@ -217,3 +294,4 @@ $(document).on('click', function (e) {
 });
 
 $('#start-reading').on('click', startReading);
+
