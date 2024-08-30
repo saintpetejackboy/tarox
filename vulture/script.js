@@ -1,20 +1,82 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    
     const imageDropdowns = document.querySelectorAll('.image-name');
 
+    function isIntegerName(name) {
+        return /^\d+$/.test(name.split('.')[0]);
+    }
+    
+    function isAlphanumericName(name) {
+        return /^[a-zA-Z0-9]+$/.test(name.split('.')[0]);
+    }
+    
+    function insertOptionInOrder(dropdown, newOption) {
+        const options = Array.from(dropdown.options);
+        const integerOptions = options.filter(opt => isIntegerName(opt.value));
+        const nonIntegerOptions = options.filter(opt => !isIntegerName(opt.value));
+        
+        if (isIntegerName(newOption.value)) {
+            const insertIndex = integerOptions.findIndex(opt => parseInt(opt.value) > parseInt(newOption.value));
+            if (insertIndex === -1) {
+                dropdown.add(newOption, nonIntegerOptions[0] || null);
+            } else {
+                dropdown.add(newOption, integerOptions[insertIndex]);
+            }
+        } else {
+            dropdown.add(newOption);
+        }
+    }
+    
+    function updateDropdowns(folder, oldName, newName, currentDropdown) {
+        imageDropdowns.forEach(dropdown => {
+            if (dropdown.dataset.folder === folder && dropdown !== currentDropdown) {
+                const option = dropdown.querySelector(`option[value="${newName}"]`);
+                if (option) {
+                    option.remove();
+                }
+                
+                if (!isIntegerName(oldName)) {
+                    const newOption = document.createElement('option');
+                    newOption.value = oldName.split('.')[0];
+                    newOption.textContent = oldName.split('.')[0];
+                    insertOptionInOrder(dropdown, newOption);
+                }
+            }
+        });
+    }
+    
+    function updateGildedClass(dropdown, newName) {
+        const imageCard = dropdown.closest('.image-card');
+        if (isAlphanumericName(newName) && !isIntegerName(newName)) {
+            dropdown.classList.add('gilded');
+            if (imageCard) imageCard.classList.add('gilded');
+        } else {
+            dropdown.classList.remove('gilded');
+            if (imageCard) imageCard.classList.remove('gilded');
+        }
+    }
+    
     imageDropdowns.forEach(dropdown => {
         dropdown.addEventListener('change', function() {
             const folder = this.dataset.folder;
             const oldName = this.dataset.original;
             const newName = this.value;
-
+    
             console.log('Dropdown changed:', { folder, oldName, newName });
-
+    
             // Send AJAX request to rename the file
             renameFile(folder, oldName, newName)
                 .then(response => {
                     if (response.success) {
                         // Update the current dropdown's data-original attribute
                         this.dataset.original = newName + '.' + oldName.split('.').pop();
+                        
+                        // Update gilded class
+                        updateGildedClass(this, newName);
+                        
+                        // Update other dropdowns in the same folder
+                        updateDropdowns(folder, oldName, newName, this);
                     } else {
                         console.error('Failed to rename file:', response.message);
                         alert(response.message);

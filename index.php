@@ -12,6 +12,7 @@ include('config.php');
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <link rel="stylesheet" href="css/styles.css?v=210">
+    <link rel="stylesheet" href="css/shared.css?v=210">
 </head>
 
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
@@ -21,10 +22,11 @@ include('config.php');
 <p style="color: cyan;">Deafchild Tarot</p>
 <p>Select cards as they pulsate.</p>
 <p>View position info (lower right) and card details (upper left).</p>
-<p>After selection, choose 'Combinations' (upper right).</p>
+<p>At the end, choose 'Combinations' (upper right).</p>
+<p>Clicking card info auto-advances.</p>
 <p>Select 'Begin' to start.</p>
-    
-<label for="imgFolderSelect">Choose Deck:</label>
+    <br>
+<label for="imgFolderSelect">Choose a Deck:</label>
     <select id="imgFolderSelect" onchange="updateImgFolder()">
         <option value="">Regular</option>
         <?php foreach ($folders as $folder): ?>

@@ -48,6 +48,16 @@ input[type="submit"] {
     height: auto;
 }
 
+.image-card.gilded {
+    border: 2px solid gold;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.image-name.gilded {
+    background-color: rgba(255, 215, 0, 0.1);
+    font-weight: bold;
+}
+
 .add-deck-button {
     background-color: #4CAF50;
     border: none;
@@ -97,3 +107,4 @@ input[type="submit"] {
     font-size: 1em;
     cursor: pointer;
 }
+

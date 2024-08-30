@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: black;
+    color: white;
+}
+
+h1, h2, h3 {
+    color: #ddd;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"], input[type="submit"] {
+    padding: 10px;
+
+}
+
+input[type="submit"] {
+    cursor: pointer;
+
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.image-card {
+    background-color: #222;
+    padding: 10px;
+    text-align: center;
+}
+
+.image-card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.image-card.gilded {
+    border: 2px solid rgb(29, 77, 116);
+    box-shadow: 0 0 10px rgba(55, 77, 175, 0.9);
+    border-radius: 10px;
+}
+
+.image-name.gilded {
+    background-color: rgba(20, 6, 34, 0.1);
+    font-weight: bold;
+}
+
+.add-deck-button, .process-button {
+    background-color: #031127;
+    border: none;
+    color: white;   
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    text-shadow: 0px 0px 20px rgb(0, 0, 0);
+    border: 1px solid rgb(21, 17, 85);
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.add-deck-button:hover, .process-button:hover {
+    background-color: #1c2e55;
+    text-shadow: 0px 0px 7px rgb(19, 102, 150);
+}
+
+.image-card input {
+    width: 90%;
+    margin-top: 5px;
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+}
+
+.message {
+    background-color: #160d36;
+    color: white;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.folder-edit {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.folder-name {
+    font-size: 1.2em;
+    margin-right: 10px;
+}
+
+.save-folder-button {
+    padding: 5px 10px;
+    font-size: 1em;
+    cursor: pointer;
+}
+

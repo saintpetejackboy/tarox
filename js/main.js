@@ -257,6 +257,7 @@ function combinations() {
 
                 // Clear all existing pulse classes before adding new ones
         $('.card').removeClass('pulse');
+
     if (combinationTexts.length === 0) {
         $('#selected-card').html('<h3>Your Combinations</h3><p>No combinations found in this reading.</p>');
     } else {
@@ -264,9 +265,11 @@ function combinations() {
         combinationTexts.forEach(combo => {
             combinationHtml += '<div class="combination">';
             combo.cards.forEach(card => {
-                $(`.card[style*="img/${card}.webp"]`).addClass('pulse');
+                
+                
                 combinationHtml += `<img src="img/${imgFolder}/${card}.webp" alt="${card}" style="width: 40px; height: auto; margin-right: 5px;">`;
-                $(`.card[style*="img/${card}.webp"]`).addClass('pulse');
+                $(`.card[style*="img/${imgFolder}/${card}.webp"]`).addClass('pulse');
+         
             });
             combinationHtml += `<p style="font-size: 0.7rem; margin-top: 5px; color: white;">${combo.text}</p></div>`;
         });
