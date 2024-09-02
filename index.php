@@ -19,7 +19,7 @@ include('config.php');
 <div class="stars"></div>
 
 <div class="modal">
-<p style="color: cyan;">Deafchild Tarot</p>
+<p style="color: cyan;">Tarox</p>
 <p>Select cards as they pulsate.</p>
 <p>View position info (lower right) and card details (upper left).</p>
 <p>At the end, choose 'Combinations' (upper right).</p>
