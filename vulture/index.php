@@ -5,6 +5,7 @@ require_once 'image_processor.php';
 $message = '';
 $images = [];
 
+
 // Add this function at the beginning of your PHP file
 function sortImages($images) {
     usort($images, function($a, $b) {
